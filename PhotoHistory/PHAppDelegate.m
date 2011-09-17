@@ -1,17 +1,21 @@
-//
-//  PHAppDelegate.m
-//  PhotoHistory
-//
-
 #import "PHAppDelegate.h"
+#import "HistoryViewController.h"
+
+@interface PHAppDelegate ()
+
+@property (nonatomic, retain) UIViewController *primaryViewController;
+
+@end
 
 @implementation PHAppDelegate
 
 @synthesize window = _window;
+@synthesize primaryViewController=_primaryViewController;
 
 - (void)dealloc
 {
     self.window = nil;
+    self.primaryViewController = nil;
     [super dealloc];
 }
 
@@ -23,6 +27,9 @@
     // Override point for customization after application launch.
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
+    // History view
+    self.primaryViewController = [[[HistoryViewController alloc] init] autorelease];
+    [self.window addSubview:self.primaryViewController.view];
     return YES;
 }
 

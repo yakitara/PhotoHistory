@@ -18,6 +18,7 @@
 		68DAD6111424E6F700D158D4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68DAD5F81424E6F600D158D4 /* Foundation.framework */; };
 		68DAD6191424E6F700D158D4 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 68DAD6171424E6F700D158D4 /* InfoPlist.strings */; };
 		68DAD61C1424E6F700D158D4 /* PhotoHistoryTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 68DAD61B1424E6F700D158D4 /* PhotoHistoryTests.m */; };
+		68DAD6271424E97700D158D4 /* HistoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68DAD6261424E97700D158D4 /* HistoryViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,6 +48,8 @@
 		68DAD6181424E6F700D158D4 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		68DAD61A1424E6F700D158D4 /* PhotoHistoryTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PhotoHistoryTests.h; sourceTree = "<group>"; };
 		68DAD61B1424E6F700D158D4 /* PhotoHistoryTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PhotoHistoryTests.m; sourceTree = "<group>"; };
+		68DAD6251424E97700D158D4 /* HistoryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HistoryViewController.h; sourceTree = "<group>"; };
+		68DAD6261424E97700D158D4 /* HistoryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HistoryViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -108,6 +111,8 @@
 			children = (
 				68DAD6051424E6F600D158D4 /* PHAppDelegate.h */,
 				68DAD6061424E6F600D158D4 /* PHAppDelegate.m */,
+				68DAD6251424E97700D158D4 /* HistoryViewController.h */,
+				68DAD6261424E97700D158D4 /* HistoryViewController.m */,
 				68DAD5FD1424E6F600D158D4 /* Supporting Files */,
 			);
 			path = PhotoHistory;
@@ -250,6 +255,7 @@
 			files = (
 				68DAD6031424E6F600D158D4 /* main.m in Sources */,
 				68DAD6071424E6F600D158D4 /* PHAppDelegate.m in Sources */,
+				68DAD6271424E97700D158D4 /* HistoryViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

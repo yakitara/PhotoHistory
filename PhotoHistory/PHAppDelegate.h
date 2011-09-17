@@ -1,8 +1,3 @@
-//
-//  PHAppDelegate.h
-//  PhotoHistory
-//
-
 #import <UIKit/UIKit.h>
 
 @interface PHAppDelegate : UIResponder <UIApplicationDelegate>
