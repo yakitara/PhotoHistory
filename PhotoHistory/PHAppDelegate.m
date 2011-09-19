@@ -1,5 +1,6 @@
 #import "PHAppDelegate.h"
 #import "HistoryViewController.h"
+#import "HistoryTableViewController.h"
 
 @interface PHAppDelegate ()
 
@@ -28,7 +29,11 @@
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
     // History view
+#if 1
+    self.primaryViewController = [[[HistoryTableViewController alloc] initWithStyle:UITableViewStylePlain] autorelease];
+#else
     self.primaryViewController = [[[HistoryViewController alloc] init] autorelease];
+#endif
     [self.window addSubview:self.primaryViewController.view];
     return YES;
 }

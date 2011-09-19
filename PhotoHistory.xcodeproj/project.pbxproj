@@ -19,6 +19,8 @@
 		68DAD6191424E6F700D158D4 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 68DAD6171424E6F700D158D4 /* InfoPlist.strings */; };
 		68DAD61C1424E6F700D158D4 /* PhotoHistoryTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 68DAD61B1424E6F700D158D4 /* PhotoHistoryTests.m */; };
 		68DAD6271424E97700D158D4 /* HistoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68DAD6261424E97700D158D4 /* HistoryViewController.m */; };
+		68DAD647142772AD00D158D4 /* HistoryTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68DAD646142772AD00D158D4 /* HistoryTableViewController.m */; };
+		68DAD64D1427785400D158D4 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68DAD64C1427785400D158D4 /* AssetsLibrary.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -50,6 +52,9 @@
 		68DAD61B1424E6F700D158D4 /* PhotoHistoryTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PhotoHistoryTests.m; sourceTree = "<group>"; };
 		68DAD6251424E97700D158D4 /* HistoryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HistoryViewController.h; sourceTree = "<group>"; };
 		68DAD6261424E97700D158D4 /* HistoryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HistoryViewController.m; sourceTree = "<group>"; };
+		68DAD645142772AD00D158D4 /* HistoryTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HistoryTableViewController.h; sourceTree = "<group>"; };
+		68DAD646142772AD00D158D4 /* HistoryTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HistoryTableViewController.m; sourceTree = "<group>"; };
+		68DAD64C1427785400D158D4 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,6 +65,7 @@
 				68DAD5F71424E6F600D158D4 /* UIKit.framework in Frameworks */,
 				68DAD5F91424E6F600D158D4 /* Foundation.framework in Frameworks */,
 				68DAD5FB1424E6F600D158D4 /* CoreGraphics.framework in Frameworks */,
+				68DAD64D1427785400D158D4 /* AssetsLibrary.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -101,6 +107,7 @@
 				68DAD5F61424E6F600D158D4 /* UIKit.framework */,
 				68DAD5F81424E6F600D158D4 /* Foundation.framework */,
 				68DAD5FA1424E6F600D158D4 /* CoreGraphics.framework */,
+				68DAD64C1427785400D158D4 /* AssetsLibrary.framework */,
 				68DAD60E1424E6F700D158D4 /* SenTestingKit.framework */,
 			);
 			name = Frameworks;
@@ -113,6 +120,8 @@
 				68DAD6061424E6F600D158D4 /* PHAppDelegate.m */,
 				68DAD6251424E97700D158D4 /* HistoryViewController.h */,
 				68DAD6261424E97700D158D4 /* HistoryViewController.m */,
+				68DAD645142772AD00D158D4 /* HistoryTableViewController.h */,
+				68DAD646142772AD00D158D4 /* HistoryTableViewController.m */,
 				68DAD5FD1424E6F600D158D4 /* Supporting Files */,
 			);
 			path = PhotoHistory;
@@ -256,6 +265,7 @@
 				68DAD6031424E6F600D158D4 /* main.m in Sources */,
 				68DAD6071424E6F600D158D4 /* PHAppDelegate.m in Sources */,
 				68DAD6271424E97700D158D4 /* HistoryViewController.m in Sources */,
+				68DAD647142772AD00D158D4 /* HistoryTableViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
