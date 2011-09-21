@@ -4,7 +4,8 @@
 @interface HistoryTableViewController ()
 
 @property (nonatomic, retain) ALAssetsLibrary *assetsLibrary;
-@property (nonatomic, retain) NSArray *photoAssets;
+@property (nonatomic, retain) NSArray *photoSections;
+@property (nonatomic, retain) NSArray *sectionTitles;
 
 @end
 
@@ -12,7 +13,8 @@
 @implementation HistoryTableViewController
 
 @synthesize assetsLibrary=_assetsLibrary;
-@synthesize photoAssets=_photoAssets;
+@synthesize photoSections=_photoSections;
+@synthesize sectionTitles=_sectionTitles;
 
 //- (id)initWithStyle:(UITableViewStyle)style
 //{
@@ -26,7 +28,8 @@
 - (void)dealloc
 {
     self.assetsLibrary = nil;
-    self.photoAssets = nil;
+    self.photoSections = nil;
+    self.sectionTitles = nil;
     [super dealloc];
 }
 
@@ -86,59 +89,85 @@
 
 #pragma mark - Private methods
 
-- (NSArray *)photoAssets
+- (NSArray *)photoSections
 {
-    if (!_photoAssets) {
-        NSMutableArray *array = [NSMutableArray arrayWithCapacity:500];
+    if (!_photoSections) {
+        NSMutableArray *sections = [NSMutableArray array];
+        NSMutableArray *assets = [NSMutableArray array];
+        NSMutableArray *sectionTitles = [NSMutableArray array];
         self.assetsLibrary = [[[ALAssetsLibrary alloc] init] autorelease];
         [self.assetsLibrary enumerateGroupsWithTypes:ALAssetsGroupSavedPhotos|ALAssetsGroupPhotoStream usingBlock:^(ALAssetsGroup *group, BOOL *stop) {
             NSLog(@"  group: %@", group);
             if (group) {
-                [group enumerateAssetsUsingBlock:^(ALAsset *result, NSUInteger index, BOOL *stop) {
+                [group enumerateAssetsUsingBlock:^(ALAsset *asset, NSUInteger index, BOOL *stop) {
                     if (index != NSNotFound) {
-                        //NSLog(@"    asset %4d: %@", index, result);
-                        [array addObject:result];
-                    } else {
-                        [self.tableView reloadData];
+                        //NSLog(@"  asset %4d: %@", index, asset);
+                        [assets addObject:asset];
                     }
                 }];
+            } else {
+                [assets sortUsingComparator:^(ALAsset *a, ALAsset *b) {
+                    return [[a valueForProperty:ALAssetPropertyDate] compare:[b valueForProperty:ALAssetPropertyDate]];
+                }];
+                //NSMutableArray *sections = [NSMutableArray array];
+                NSCalendar *cal = [NSCalendar currentCalendar];
+                for (ALAsset *asset in assets) {
+                    NSDate *date = [asset valueForProperty:ALAssetPropertyDate];
+                    NSDictionary *section = [sections lastObject];
+                    if (!section) {
+                        NSDateComponents *monthComponents = [cal components:(NSYearCalendarUnit | NSMonthCalendarUnit) fromDate:date];
+                        NSDate *month = [cal dateFromComponents:monthComponents];
+                        section = [NSDictionary dictionaryWithObjectsAndKeys:month, @"month", [NSMutableArray array], @"assets", nil];
+                        [sections addObject:section];
+                    }
+                    NSDateComponents *nextMonthComponents = [[NSDateComponents new] autorelease];
+                    [nextMonthComponents setMonth:1];
+                    NSDate *nextMonth = [cal dateByAddingComponents:nextMonthComponents toDate:[section objectForKey:@"month"] options:0];
+                    if ([date compare:nextMonth] != NSOrderedAscending) {
+                        section = [NSDictionary dictionaryWithObjectsAndKeys:nextMonth, @"month", [NSMutableArray array], @"assets", nil];
+                        [sections addObject:section];
+                    }
+                    [[section objectForKey:@"assets"] addObject:asset];
+                }
+                NSDateFormatter *dateFormatter = [[NSDateFormatter new] autorelease];
+                dateFormatter.dateFormat = @"YY年MM月";
+                for (NSDictionary *section in sections) {
+                    [sectionTitles addObject:[dateFormatter stringFromDate:[section objectForKey:@"month"]]];
+                }
+                [self.tableView reloadData];
             }
         } failureBlock: ^(NSError *error) {
             NSLog(@"ERROR: enumerateGroupsWithTypes -> %@", error);
             // TODO: ALAssetsLibraryAccessGloballyDeniedError 
         }];
-        _photoAssets = [array retain];
+        _photoSections = [sections retain];
+        self.sectionTitles = [sectionTitles retain];
     }
-    return _photoAssets;
+    return _photoSections;
 }
 
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 1;
+    return self.photoSections.count;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-#if 1
-    NSLog(@"%s -> %d", __PRETTY_FUNCTION__, self.photoAssets.count);
-    return self.photoAssets.count;
-#else
-    ALAssetsLibrary* library = [[[ALAssetsLibrary alloc] init] autorelease];
-    [library enumerateGroupsWithTypes:ALAssetsGroupSavedPhotos|ALAssetsGroupPhotoStream usingBlock:^(ALAssetsGroup *group, BOOL *stop) {
-        NSLog(@"  group: %@", group);
-        [group enumerateAssetsUsingBlock:^(ALAsset *result, NSUInteger index, BOOL *stop) {
-            if (index != NSNotFound) {
-                NSLog(@"    asset %4d: %@", index, result);
-            }
-        }];
+//    NSLog(@"%s -> %d", __PRETTY_FUNCTION__, self.photoSections.count);
+    return [[[self.photoSections objectAtIndex:section] objectForKey:@"assets"] count];
+}
 
-    } failureBlock: ^(NSError *error) {
-        NSLog(@"ERROR: enumerateGroupsWithTypes -> %@", error);
-    }];
-    return 0;
-#endif
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+//    return [[[self.photoSections objectAtIndex:section] objectForKey:@"month"] description];
+    return [self.sectionTitles objectAtIndex:section];
+}
+
+- (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView
+{
+    return self.sectionTitles;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -149,9 +178,14 @@
     if (cell == nil) {
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
     }
-    ALAsset *asset = [self.photoAssets objectAtIndex:indexPath.row];
+#if 1
+    ALAsset *asset = [[[self.photoSections objectAtIndex:indexPath.section] objectForKey:@"assets"] objectAtIndex:indexPath.row];
+#else
+    ALAsset *asset = [self.photoSections objectAtIndex:indexPath.row];
+#endif
     cell.imageView.image = [UIImage imageWithCGImage:asset.thumbnail];
-    
+    NSDate *date = [asset valueForProperty:ALAssetPropertyDate];;
+    cell.textLabel.text = [date description];
     
     return cell;
 }
