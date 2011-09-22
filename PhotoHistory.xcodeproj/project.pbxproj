@@ -358,6 +358,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "PhotoHistory/PhotoHistory-Prefix.pch";
 				INFOPLIST_FILE = "PhotoHistory/PhotoHistory-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -369,6 +370,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "PhotoHistory/PhotoHistory-Prefix.pch";
 				INFOPLIST_FILE = "PhotoHistory/PhotoHistory-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -427,6 +429,7 @@
 				68DAD6211424E6F700D158D4 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		68DAD6221424E6F700D158D4 /* Build configuration list for PBXNativeTarget "PhotoHistoryTests" */ = {
 			isa = XCConfigurationList;
@@ -435,6 +438,7 @@
 				68DAD6241424E6F700D158D4 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
