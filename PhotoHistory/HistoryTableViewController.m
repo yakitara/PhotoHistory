@@ -194,18 +194,30 @@
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         for (int i = 0; i < THUMB_COLS; i++) {
             UIImageView *imageView = [[[UIImageView alloc] initWithFrame:CGRectMake(1 + (THUMB_SIZE + 1) * i, 0, THUMB_SIZE, THUMB_SIZE)] autorelease];
+            UILabel *label = [[[UILabel alloc] initWithFrame:CGRectMake(0, THUMB_SIZE - 10, THUMB_SIZE, 10)] autorelease];
+            label.textAlignment = UITextAlignmentRight;
+            label.font = [UIFont systemFontOfSize:9];
+            label.textColor = [UIColor whiteColor];
+            label.backgroundColor = [[[UIColor alloc] initWithWhite:0 alpha:0.2] autorelease];
+            [imageView addSubview:label];
             [cell.contentView addSubview:imageView];
         }
     }
     NSArray *assets = [[self.photoSections objectAtIndex:indexPath.section] objectForKey:@"assets"];
+    NSDateFormatter *dateFormatter = [[NSDateFormatter new] autorelease];
+    dateFormatter.dateFormat = @"M/d HH:mm";
     for (int i = 0; i < THUMB_COLS; i++) {
         UIImageView *imageView = [cell.contentView.subviews objectAtIndex:i];
+        UILabel *label = imageView.subviews.lastObject;
         int index = indexPath.row * THUMB_COLS + i;
         if (index < assets.count) {
             ALAsset *asset = [assets objectAtIndex:index];
             imageView.image = [UIImage imageWithCGImage:asset.thumbnail];
+            NSDate *date = [asset valueForProperty:ALAssetPropertyDate];
+            label.text = [dateFormatter stringFromDate:date];
         } else {
             imageView.image = nil;
+            label.text = nil;
         }
     }
     return cell;
