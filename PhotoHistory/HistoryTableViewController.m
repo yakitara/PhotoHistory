@@ -1,6 +1,9 @@
 #import "HistoryTableViewController.h"
 #import <AssetsLibrary/AssetsLibrary.h>
 
+#define THUMB_SIZE (90.0)
+#define THUMB_COLS (3)
+
 @interface HistoryTableViewController ()
 
 @property (nonatomic, retain) ALAssetsLibrary *assetsLibrary;
@@ -46,7 +49,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
+    self.tableView.rowHeight = THUMB_SIZE;
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
  
@@ -165,7 +168,8 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
 //    NSLog(@"%s -> %d", __PRETTY_FUNCTION__, self.photoSections.count);
-    return [[[self.photoSections objectAtIndex:section] objectForKey:@"assets"] count];
+    int count = [[[self.photoSections objectAtIndex:section] objectForKey:@"assets"] count];
+    return count / THUMB_COLS + ((count % THUMB_COLS) ? 1 : 0);
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
@@ -187,16 +191,23 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        for (int i = 0; i < THUMB_COLS; i++) {
+            UIImageView *imageView = [[[UIImageView alloc] initWithFrame:CGRectMake(1 + (THUMB_SIZE + 1) * i, 0, THUMB_SIZE, THUMB_SIZE)] autorelease];
+            [cell.contentView addSubview:imageView];
+        }
     }
-#if 1
-    ALAsset *asset = [[[self.photoSections objectAtIndex:indexPath.section] objectForKey:@"assets"] objectAtIndex:indexPath.row];
-#else
-    ALAsset *asset = [self.photoSections objectAtIndex:indexPath.row];
-#endif
-    cell.imageView.image = [UIImage imageWithCGImage:asset.thumbnail];
-    NSDate *date = [asset valueForProperty:ALAssetPropertyDate];;
-    cell.textLabel.text = [date description];
-    
+    NSArray *assets = [[self.photoSections objectAtIndex:indexPath.section] objectForKey:@"assets"];
+    for (int i = 0; i < THUMB_COLS; i++) {
+        UIImageView *imageView = [cell.contentView.subviews objectAtIndex:i];
+        int index = indexPath.row * THUMB_COLS + i;
+        if (index < assets.count) {
+            ALAsset *asset = [assets objectAtIndex:index];
+            imageView.image = [UIImage imageWithCGImage:asset.thumbnail];
+        } else {
+            imageView.image = nil;
+        }
+    }
     return cell;
 }
 
