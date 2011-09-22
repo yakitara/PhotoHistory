@@ -5,7 +5,7 @@
 
 @property (nonatomic, retain) ALAssetsLibrary *assetsLibrary;
 @property (nonatomic, retain) NSArray *photoSections;
-@property (nonatomic, retain) NSArray *sectionTitles;
+@property (nonatomic, retain) NSArray *sectionIndexTitles;
 
 @end
 
@@ -14,7 +14,7 @@
 
 @synthesize assetsLibrary=_assetsLibrary;
 @synthesize photoSections=_photoSections;
-@synthesize sectionTitles=_sectionTitles;
+@synthesize sectionIndexTitles=_sectionIndexTitles;
 
 //- (id)initWithStyle:(UITableViewStyle)style
 //{
@@ -29,7 +29,7 @@
 {
     self.assetsLibrary = nil;
     self.photoSections = nil;
-    self.sectionTitles = nil;
+    self.sectionIndexTitles = nil;
     [super dealloc];
 }
 
@@ -94,7 +94,7 @@
     if (!_photoSections) {
         NSMutableArray *sections = [NSMutableArray array];
         NSMutableArray *assets = [NSMutableArray array];
-        NSMutableArray *sectionTitles = [NSMutableArray array];
+        NSMutableArray *sectionIndexTitles = [NSMutableArray array];
         self.assetsLibrary = [[[ALAssetsLibrary alloc] init] autorelease];
         [self.assetsLibrary enumerateGroupsWithTypes:ALAssetsGroupSavedPhotos|ALAssetsGroupPhotoStream usingBlock:^(ALAssetsGroup *group, BOOL *stop) {
             NSLog(@"  group: %@", group);
@@ -129,11 +129,20 @@
                     }
                     [[section objectForKey:@"assets"] addObject:asset];
                 }
-                NSDateFormatter *dateFormatter = [[NSDateFormatter new] autorelease];
-                dateFormatter.dateFormat = @"YY年MM月";
+                NSDateFormatter *yearFormatter = [[NSDateFormatter new] autorelease];
+                yearFormatter.dateFormat = @"y";
+                NSDateFormatter *monthFormatter = [[NSDateFormatter new] autorelease];
+                monthFormatter.dateFormat = @"M月";
+                NSString *lastYear = nil;
                 for (NSDictionary *section in sections) {
-                    [sectionTitles addObject:[dateFormatter stringFromDate:[section objectForKey:@"month"]]];
-                }
+                    NSString *title = [yearFormatter stringFromDate:[section objectForKey:@"month"]];
+                    if ([lastYear isEqual:title]) {
+                        title = [monthFormatter stringFromDate:[section objectForKey:@"month"]];
+                    } else {
+                        lastYear = title;
+                    }
+                    [sectionIndexTitles addObject:title];
+            }
                 [self.tableView reloadData];
             }
         } failureBlock: ^(NSError *error) {
@@ -141,7 +150,7 @@
             // TODO: ALAssetsLibraryAccessGloballyDeniedError 
         }];
         _photoSections = [sections retain];
-        self.sectionTitles = [sectionTitles retain];
+        self.sectionIndexTitles = [sectionIndexTitles retain];
     }
     return _photoSections;
 }
@@ -161,13 +170,14 @@
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-//    return [[[self.photoSections objectAtIndex:section] objectForKey:@"month"] description];
-    return [self.sectionTitles objectAtIndex:section];
+    NSDateFormatter *dateFormatter = [[NSDateFormatter new] autorelease];
+    dateFormatter.dateFormat = @"y年M月";
+    return [dateFormatter stringFromDate:[[self.photoSections objectAtIndex:section] objectForKey:@"month"]];
 }
 
 - (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView
 {
-    return self.sectionTitles;
+    return self.sectionIndexTitles;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
